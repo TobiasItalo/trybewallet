@@ -11,7 +11,7 @@ class Header extends Component {
         <h1>TrybeWallet</h1>
         <p data-testid="email-field">{ email }</p>
         <p data-testid="total-field">
-          {'0 '}
+          {'Despesa Total: R$ 0 '}
           <span data-testid="header-currency-field">BRL</span>
         </p>
       </header>
