@@ -6,5 +6,4 @@ const fetchCurrencies = async () => {
   return data;
 };
 
-// fetchCurrencies();
 export default fetchCurrencies;

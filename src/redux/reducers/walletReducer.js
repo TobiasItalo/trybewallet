@@ -1,6 +1,7 @@
 // import { SAVE_LOGIN } from '../../types/userType';
 
 import {
+  SAVE_EXPENSE,
   // FAILED_REQUEST,
   // IS_LOADING,
   SUCCEEDED_REQUEST } from '../../types/walletTypes';
@@ -12,6 +13,17 @@ const INITIAL_STATE = {
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
   // isLoading: false,
   // error: '',
+};
+
+let id = 0;
+
+const contID = (payload) => {
+  const result = {
+    id,
+    ...payload,
+  };
+  id += 1;
+  return result;
 };
 
 const walletReducer = (state = INITIAL_STATE, action) => {
@@ -31,8 +43,16 @@ const walletReducer = (state = INITIAL_STATE, action) => {
   case SUCCEEDED_REQUEST:
     return {
       ...state,
-      isLoading: false,
+      // isLoading: false,
       currencies: payload,
+    };
+  case SAVE_EXPENSE:
+    return {
+      ...state,
+      expenses: [
+        ...state.expenses,
+        contID(payload),
+      ],
     };
   default:
     return state;

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actionFetchCurrencies } from '../redux/actions/walletAction';
+import { actionFetchCurrencies, dispatchExpense } from '../redux/actions/walletAction';
 
 class WalletForm extends Component {
   state = {
@@ -27,12 +27,16 @@ class WalletForm extends Component {
   handleClickSubmit = (event) => {
     event.preventDefault();
     const {
-      email,
-    } = this.state;
-    const {
       dispatch,
     } = this.props;
-    dispatch(saveLogin({ email }));
+    dispatch(dispatchExpense(this.state));
+    this.setState({
+      value: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Alimentação',
+      description: '',
+    });
   };
 
   render() {
@@ -124,6 +128,7 @@ class WalletForm extends Component {
           />
         </label>
 
+        <button type="submit">Adicionar despesa</button>
       </form>
     );
   }
