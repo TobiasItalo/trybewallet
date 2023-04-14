@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actionFetchCurrencies, dispatchExpense } from '../redux/actions/walletAction';
+import { actionFetchCurrencies, addExpense } from '../redux/actions/walletAction';
 
 class WalletForm extends Component {
   state = {
@@ -29,7 +29,7 @@ class WalletForm extends Component {
     const {
       dispatch,
     } = this.props;
-    dispatch(dispatchExpense(this.state));
+    dispatch(addExpense(this.state));
     this.setState({
       value: '',
       currency: 'USD',

@@ -43,7 +43,7 @@ export const saveExpense = (expense, data) => ({
   },
 });
 
-export const dispatchExpense = (expense) => async (dispatch) => {
+export const addExpense = (expense) => async (dispatch) => {
   const data = await fetchCurrencies();
   dispatch(saveExpense(expense, data));
 };
