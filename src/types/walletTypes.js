@@ -1,0 +1,5 @@
+export const IS_LOADING = 'IS_LOADING';
+
+export const SUCCEEDED_REQUEST = 'SUCCEEDED_REQUEST';
+
+export const FAILED_REQUEST = 'FAILED_REQUEST';
