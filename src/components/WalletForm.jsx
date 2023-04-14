@@ -29,6 +29,7 @@ class WalletForm extends Component {
     const {
       dispatch,
     } = this.props;
+
     dispatch(addExpense(this.state));
     this.setState({
       value: '',
@@ -52,6 +53,7 @@ class WalletForm extends Component {
       currencies,
     } = this.props;
 
+    // form onReset
     return (
       <form onSubmit={ this.handleClickSubmit }>
         <label htmlFor="value">

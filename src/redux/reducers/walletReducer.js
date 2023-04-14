@@ -1,6 +1,7 @@
 // import { SAVE_LOGIN } from '../../types/userType';
 
 import {
+  DELETE_EXPENSE,
   SAVE_EXPENSE,
   // FAILED_REQUEST,
   // IS_LOADING,
@@ -15,16 +16,8 @@ const INITIAL_STATE = {
   // error: '',
 };
 
-let id = 0;
-
-const contID = (payload) => {
-  const result = {
-    id,
-    ...payload,
-  };
-  id += 1;
-  return result;
-};
+const INITIAL_CONT = -1;
+let id = INITIAL_CONT;
 
 const walletReducer = (state = INITIAL_STATE, action) => {
   const { type, payload } = action;
@@ -47,12 +40,21 @@ const walletReducer = (state = INITIAL_STATE, action) => {
       currencies: payload,
     };
   case SAVE_EXPENSE:
+    id += 1;
     return {
       ...state,
       expenses: [
         ...state.expenses,
-        contID(payload),
+        {
+          id,
+          ...payload,
+        },
       ],
+    };
+  case DELETE_EXPENSE:
+    return {
+      ...state,
+      expenses: state.expenses.filter((expense) => (expense.id) !== payload),
     };
   default:
     return state;

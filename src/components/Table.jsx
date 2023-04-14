@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { deleteExpense } from '../redux/actions/walletAction';
 
 class Table extends Component {
+  handleClick = (event, id) => {
+    event.preventDefault();
+    const {
+      dispatch,
+    } = this.props;
+
+    dispatch(deleteExpense(id));
+  };
+
   render() {
     const {
       expenses,
@@ -45,7 +55,15 @@ class Table extends Component {
                   { (Number(value) * Number(exchangeRates[currency].ask)).toFixed(2) }
                 </td>
                 <td>Real</td>
-                <td>próximos requisitos</td>
+                <td>
+                  <button
+                    type="button"
+                    data-testid="delete-btn"
+                    onClick={ (event) => this.handleClick(event, id) }
+                  >
+                    Excluir
+                  </button>
+                </td>
               </tr>
             ))
           }
@@ -56,6 +74,7 @@ class Table extends Component {
 }
 
 Table.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   expenses: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
 };
 

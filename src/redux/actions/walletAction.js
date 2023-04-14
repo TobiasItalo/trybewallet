@@ -2,7 +2,9 @@ import {
   SAVE_EXPENSE,
   // FAILED_REQUEST,
   // IS_LOADING,
-  SUCCEEDED_REQUEST } from '../../types/walletTypes';
+  SUCCEEDED_REQUEST,
+  DELETE_EXPENSE,
+} from '../../types/walletTypes';
 import fetchCurrencies from '../../services/fetchCurrencies';
 
 // export const isLoading = () => ({
@@ -47,3 +49,8 @@ export const addExpense = (expense) => async (dispatch) => {
   const data = await fetchCurrencies();
   dispatch(saveExpense(expense, data));
 };
+
+export const deleteExpense = (payload) => ({
+  type: DELETE_EXPENSE,
+  payload,
+});
