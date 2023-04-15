@@ -1,9 +1,12 @@
+import { toast } from 'react-toastify';
 import {
   SAVE_EXPENSE,
   // FAILED_REQUEST,
   // IS_LOADING,
   SUCCEEDED_REQUEST,
   DELETE_EXPENSE,
+  UPDATE_EXPENSE,
+  SAVE_UPDATED_EXPENSE,
 } from '../../types/walletTypes';
 import fetchCurrencies from '../../services/fetchCurrencies';
 
@@ -46,11 +49,26 @@ export const saveExpense = (expense, data) => ({
 });
 
 export const addExpense = (expense) => async (dispatch) => {
-  const data = await fetchCurrencies();
-  dispatch(saveExpense(expense, data));
+  try {
+    const data = await fetchCurrencies();
+    dispatch(saveExpense(expense, data));
+    toast.success('Despesa adicionada com sucesso!');
+  } catch (error) {
+    toast.error(error.message);
+  }
 };
 
 export const deleteExpense = (payload) => ({
   type: DELETE_EXPENSE,
+  payload,
+});
+
+export const updateExpense = (payload) => ({
+  type: UPDATE_EXPENSE,
+  payload,
+});
+
+export const saveUpdatedExpense = (payload) => ({
+  type: SAVE_UPDATED_EXPENSE,
   payload,
 });

@@ -3,9 +3,11 @@
 import {
   DELETE_EXPENSE,
   SAVE_EXPENSE,
+  SAVE_UPDATED_EXPENSE,
   // FAILED_REQUEST,
   // IS_LOADING,
-  SUCCEEDED_REQUEST } from '../../types/walletTypes';
+  SUCCEEDED_REQUEST,
+  UPDATE_EXPENSE } from '../../types/walletTypes';
 
 const INITIAL_STATE = {
   currencies: [], // array de string
@@ -22,21 +24,9 @@ let id = INITIAL_CONT;
 const walletReducer = (state = INITIAL_STATE, action) => {
   const { type, payload } = action;
   switch (type) {
-  // case IS_LOADING:
-  //   return {
-  //     ...state,
-  //     isLoading: true,
-  //   };
-  // case FAILED_REQUEST:
-  //   return {
-  //     ...state,
-  //     isLoading: false,
-  //     error: payload.error,
-  //   };
   case SUCCEEDED_REQUEST:
     return {
       ...state,
-      // isLoading: false,
       currencies: payload,
     };
   case SAVE_EXPENSE:
@@ -55,6 +45,20 @@ const walletReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       expenses: state.expenses.filter((expense) => (expense.id) !== payload),
+    };
+  case UPDATE_EXPENSE:
+    return {
+      ...state,
+      editor: true,
+      idToEdit: payload,
+    };
+  case SAVE_UPDATED_EXPENSE:
+    return {
+      ...state,
+      editor: false,
+      expenses: state.expenses.map((expense) => (
+        payload.idToEdit === expense.id ? { ...expense, ...payload.expense } : expense)),
+      idToEdit: 0,
     };
   default:
     return state;
