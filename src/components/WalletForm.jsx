@@ -7,23 +7,58 @@ import {
   saveUpdatedExpense,
 } from '../redux/actions/walletAction';
 
-const USD = 'USD';
-const DINHEIRO = 'Dinheiro';
-const ALIMENTACAO = 'Alimentação';
+const INITIAL_STATE = {
+  value: '',
+  currency: 'USD',
+  method: 'Dinheiro',
+  tag: 'Alimentação',
+  description: '',
+  inEditing: false,
+};
 
 class WalletForm extends Component {
-  state = {
-    value: '',
-    currency: USD,
-    method: DINHEIRO,
-    tag: ALIMENTACAO,
-    description: '',
-  };
+  state = INITIAL_STATE;
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(actionFetchCurrencies());
   }
+
+  componentDidUpdate(prevProps) {
+    const {
+      idToEdit,
+      editor,
+    } = this.props;
+    const { inEditing } = this.state;
+    if ((editor && !inEditing) || (editor && prevProps.idToEdit !== idToEdit)) {
+      this.setExpenseToEdit();
+    }
+    if (!editor && prevProps.editor) {
+      this.setState(INITIAL_STATE);
+    }
+  }
+
+  setExpenseToEdit = () => {
+    const { expenses, idToEdit } = this.props;
+    const currExpense = expenses.find((expense) => expense.id === idToEdit);
+    if (currExpense) {
+      const {
+        value,
+        currency,
+        method,
+        tag,
+        description,
+      } = currExpense;
+      this.setState({
+        value,
+        currency,
+        method,
+        tag,
+        description,
+        inEditing: true,
+      });
+    }
+  };
 
   handleChange = ({ target }) => {
     const { name, value } = target;
@@ -52,13 +87,7 @@ class WalletForm extends Component {
       tag,
       description,
     }));
-    this.setState({
-      value: '',
-      currency: USD,
-      method: DINHEIRO,
-      tag: ALIMENTACAO,
-      description: '',
-    });
+    this.setState(INITIAL_STATE);
   };
 
   handleUpdate = (event) => {
@@ -85,28 +114,13 @@ class WalletForm extends Component {
         description,
       },
     }));
-    this.setState({
-      value: '',
-      currency: USD,
-      method: DINHEIRO,
-      tag: ALIMENTACAO,
-      description: '',
-    });
+    this.setState(INITIAL_STATE);
   };
 
   render() {
-    const {
-      value,
-      currency,
-      method,
-      tag,
-      description,
-    } = this.state;
+    const { value, currency, method, tag, description } = this.state;
 
-    const {
-      currencies,
-      editor,
-    } = this.props;
+    const { currencies, editor, isLoading } = this.props;
 
     // form onReset
     return (
@@ -185,7 +199,10 @@ class WalletForm extends Component {
           />
         </label>
 
-        <button type="submit">{ editor ? 'Editar despesa' : 'Adicionar despesa' }</button>
+        <button type="submit" disabled={ isLoading }>
+          { editor ? 'Editar despesa' : 'Adicionar despesa' }
+          { isLoading && <i className="fa fa-spinner fa-pulse fa-fw" />}
+        </button>
       </form>
     );
   }
@@ -193,15 +210,25 @@ class WalletForm extends Component {
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  expenses: state.wallet.expenses,
   editor: state.wallet.editor,
   idToEdit: state.wallet.idToEdit,
+  isLoading: state.wallet.isLoading,
 });
 
 WalletForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    currency: PropTypes.string.isRequired,
+    method: PropTypes.string.isRequired,
+    tag: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
   editor: PropTypes.bool.isRequired,
   idToEdit: PropTypes.number.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);

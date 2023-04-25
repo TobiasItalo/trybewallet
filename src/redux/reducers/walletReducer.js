@@ -5,7 +5,7 @@ import {
   SAVE_EXPENSE,
   SAVE_UPDATED_EXPENSE,
   // FAILED_REQUEST,
-  // IS_LOADING,
+  IS_LOADING,
   SUCCEEDED_REQUEST,
   UPDATE_EXPENSE } from '../../types/walletTypes';
 
@@ -14,8 +14,7 @@ const INITIAL_STATE = {
   expenses: [], // array de objetos, com cada objeto tendo as chaves id, value, currency, method, tag, description e exchangeRates
   editor: false, // valor booleano que indica de uma despesa está sendo editada
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
-  // isLoading: false,
-  // error: '',
+  isLoading: false,
 };
 
 const INITIAL_CONT = -1;
@@ -24,27 +23,25 @@ let id = INITIAL_CONT;
 const walletReducer = (state = INITIAL_STATE, action) => {
   const { type, payload } = action;
   switch (type) {
-  case SUCCEEDED_REQUEST:
+  case IS_LOADING:
     return {
       ...state,
-      currencies: payload,
+      isLoading: payload,
     };
+  case SUCCEEDED_REQUEST:
+    return { ...state, currencies: payload };
   case SAVE_EXPENSE:
     id += 1;
     return {
       ...state,
-      expenses: [
-        ...state.expenses,
-        {
-          id,
-          ...payload,
-        },
-      ],
+      expenses: [...state.expenses, { id, ...payload }],
+      isLoading: false,
     };
   case DELETE_EXPENSE:
     return {
       ...state,
       expenses: state.expenses.filter((expense) => (expense.id) !== payload),
+      editor: false,
     };
   case UPDATE_EXPENSE:
     return {

@@ -7,12 +7,14 @@ import {
   DELETE_EXPENSE,
   UPDATE_EXPENSE,
   SAVE_UPDATED_EXPENSE,
+  IS_LOADING,
 } from '../../types/walletTypes';
 import fetchCurrencies from '../../services/fetchCurrencies';
 
-// export const isLoading = () => ({
-//   type: IS_LOADING,
-// });
+export const isLoading = (payload) => ({
+  type: IS_LOADING,
+  payload,
+});
 
 // export const failedRequest = (payload) => ({
 //   type: FAILED_REQUEST,
@@ -50,6 +52,7 @@ export const saveExpense = (expense, data) => ({
 
 export const addExpense = (expense) => async (dispatch) => {
   try {
+    dispatch(isLoading(true));
     const data = await fetchCurrencies();
     dispatch(saveExpense(expense, data));
     toast.success('Despesa adicionada com sucesso!');
