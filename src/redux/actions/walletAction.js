@@ -57,7 +57,7 @@ export const addExpense = (expense) => async (dispatch) => {
     dispatch(saveExpense(expense, data));
     toast.success('Despesa adicionada com sucesso!');
   } catch (error) {
-    toast.error(error.message);
+    // toast.error(error.message);
   }
 };
 
